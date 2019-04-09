@@ -1,0 +1,162 @@
+<CustButton@Button>:
+    font_size: 18
+    spacing: [10, 10]
+    size_hint: [None, None]
+    pos_hint: {'center_x': 0, 'center_y': .5}
+
+<CustLabel@Label>:
+    font_size: 18
+    pos_hint: [None, None]
+    color: 1, 0.757, 0.145, 1
+    size_hint: [.8,.8]
+    font_name:"GOST_A_.ttf"
+
+
+<CustTextInput@TextInput>:
+    font_size: 18
+    write_tab: False    
+    size_hint: [.5,.5]
+    font_name:"GOST_A_.ttf"
+
+<AppGrid>:
+    padding: [10,10]
+    rows: 3
+    cols: 0
+    id: fgdetest
+    display: result
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: [10,10]
+        TabbedPanel:
+#            pos_hint: {'center_x': .5, 'center_y': .5}
+            do_default_tab: False
+            TabbedPanelItem:
+                text: u'Radius'
+                GridLayout:
+                    padding: [10,10]
+                    rows: 2
+                    cols: 2
+                    GridLayout:
+                        size_hint: 0.3, 0.9
+                        padding: [10,10]
+                        rows: 11
+                        cols: 1
+                        GridLayout:
+                            rows: 3
+                            cols: 2
+                            padding: [10,10]
+
+                            CustLabel:
+                                text: u'a = тест'
+
+                            CustTextInput:
+                                id: a
+                                hint_text: "m"
+
+                            CustLabel:
+                                text: "b  kljkjljlkjl"
+
+                            CustTextInput:
+                                id: b
+                                hint_text: "m3"
+
+                            CustLabel:
+                                text: "d"
+
+                            CustTextInput:
+                                id: d
+                                hint_text: "m"
+                        GridLayout:
+                            rows: 3
+                            cols: 2
+                            padding: [10,10]
+
+                            CustLabel:
+                                text: "Px "
+                                
+                            CustTextInput:
+                                id: px
+                                hint_text: "H"
+
+                            CustLabel:
+                                text: "Py "
+
+                            CustTextInput:
+                                id: py
+                                hint_text: "H"
+
+                            CustLabel:
+                                text: "M "
+
+                            CustTextInput:
+                                id: m
+                                hint_text: "Hm"
+                        GridLayout:
+                            rows: 3
+                            cols: 2
+                            padding: [10,10]
+
+                            CustLabel:
+                                text: "p1 ="
+                                
+                            CustTextInput:
+                                id: p1
+                                hint_text: "Pa"
+
+                            CustLabel:
+                                text: "p2 "
+
+                            CustTextInput:
+                                id: p2
+                                hint_text: "Pa"
+
+                            CustLabel:
+                                text: "f "
+
+                            CustTextInput:
+                                id: f
+                                hint_text: "_"
+                        GridLayout:
+                            rows: 3
+                            cols: 2
+                            padding: [10,10]
+                            CustLabel:
+                                text: "accuracy"
+
+                            CustTextInput:
+                                id: accuracy
+                                hint_text: "_"
+                            CustLabel:
+                                text: "number of chunks"
+
+                            CustTextInput:
+                                id: chunks
+                                hint_text: "_"
+                            CustLabel:
+
+                    GridLayout:
+                        padding: [10,10]
+                        size_hint: 0.6, 0.9
+                        rows: 3
+                        cols: 1
+                        BoxLayout:
+                            id: chart_data
+
+                    BoxLayout:
+                        size_hint: 0.8, 0.1
+                        Label:
+                            id: result
+                            text: result.text
+                    CustButton:
+                        text: "calculate"
+                        size_hint: 0.2, 0.1
+                        on_press: fgdetest.execute()
+                            
+                        
+#            TabbedPanelItem:
+#                text: 'tab2'
+#                BoxLayout:
+#                    Label:
+#                        text: 'Second tab content area'
+#                    Button:
+#                        text: 'Button that does nothing'
