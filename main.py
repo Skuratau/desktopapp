@@ -38,7 +38,6 @@ class AppGrid(GridLayout):
     ds = {}
 
     def get_chart_data(self):
-        '''
         a = float(self.ids.a.text)
         b = float(self.ids.b.text)
         d = float(self.ids.d.text)
@@ -49,42 +48,6 @@ class AppGrid(GridLayout):
         p2 = float(self.ids.p2.text)
         m = float(self.ids.m.text)
         chunks = float(self.ids.chunks.text)
-        '''
-        a = 3.7
-        b = 0.16
-        d = 2.66
-        px = 0
-        py = 70000
-        f = 0.8
-        p1 = 26134
-        p2 = 26124
-        m = 0
-        chunks = 7
-
-        '''
-        a = 2.9
-        b = 0.67
-        d = 1.78
-        px = -9500
-        py = -11500
-        f = 0.6
-        p1 = 16958
-        p2 = 23030
-        m = -4360
-        chunks = 10
-
-
-        a = 3
-        b = 0.5
-        d = 3
-        px = 1000
-        py = -11150
-        f = 0.5
-        p1 = 16958
-        p2 = 23030
-        m = -4360
-        chunks = 10
-        '''
 
         px_chart_data = []
         for chunk in split_float_into_parts(px, chunks):
