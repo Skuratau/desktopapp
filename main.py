@@ -2,9 +2,10 @@
 # kivy.require('1.10.1') # replace with your current kivy version !
 
 
-import os
+from os import environ
 
-os.environ['KIVY_IMAGE'] = 'pil,sdl2'
+environ['KIVY_IMAGE'] = 'pil,sdl2'
+from kivy.core.window import Window
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from scipy.optimize import fsolve, root
@@ -17,11 +18,12 @@ import matplotlib.pyplot as plt
 
 
 
+
 def split_float_into_parts(number, n_parts):
     return linspace(0, number, n_parts + 1)[1:]
 
 
-# refactor
+#TODO refactoring
 def set_of_dict_to_dict(initial_list, set_of_keys=[]):
     data_set = {}
     for key in set_of_keys:
@@ -47,7 +49,19 @@ class AppGrid(GridLayout):
         p2 = float(self.ids.p2.text)
         m = float(self.ids.m.text)
         chunks = float(self.ids.chunks.text)
+        '''
+        a = 3.7
+        b = 0.16
+        d = 2.66
+        px = 0
+        py = 70000
+        f = 0.8
+        p1 = 26134
+        p2 = 26124
+        m = 0
+        chunks = 7
 
+        '''
         a = 2.9
         b = 0.67
         d = 1.78
@@ -57,9 +71,8 @@ class AppGrid(GridLayout):
         p1 = 16958
         p2 = 23030
         m = -4360
-        chunks = 1000
+        chunks = 10
 
-        '''
 
         a = 3
         b = 0.5
@@ -71,7 +84,7 @@ class AppGrid(GridLayout):
         p2 = 23030
         m = -4360
         chunks = 10
-
+        '''
 
         px_chart_data = []
         for chunk in split_float_into_parts(px, chunks):
@@ -127,11 +140,13 @@ class AppGrid(GridLayout):
                self.ds['p1'] * self.ds['f'] * self.ds['a'] * self.ds['b'] / 3 * (
                    (self.ds['a'] / 3 + ey) / ((self.ds['a'] / 3 + ey) ** 2 + e1x ** 2) ** (1 / 2) +
                    ey / (ey ** 2 + e1x ** 2) ** (1 / 2) -
-                   (self.ds['a'] / 3 - ey) / ((self.ds['a'] / 3 - ey) ** 2 + e1x ** 2) ** (1 / 2)) + \
+                   (self.ds['a'] / 3 - ey) / ((self.ds['a'] / 3 - ey) ** 2 + e1x ** 2) ** (1 / 2)
+               ) + \
                self.ds['p2'] * self.ds['f'] * self.ds['a'] * self.ds['b'] / 3 * (
                    (self.ds['a'] / 3 + ey) / ((self.ds['a'] / 3 + ey) ** 2 + e2x ** 2) ** (1 / 2) +
                    ey / (ey ** 2 + e2x ** 2) ** (1 / 2) -
-                   (self.ds['a'] / 3 - ey) / ((self.ds['a'] / 3 - ey) ** 2 + e2x ** 2) ** (1 / 2))
+                   (self.ds['a'] / 3 - ey) / ((self.ds['a'] / 3 - ey) ** 2 + e2x ** 2) ** (1 / 2)
+               )
 
         f[1] = self.ds['py'] - \
                self.ds['p1'] * self.ds['f'] * self.ds['a'] * self.ds['b'] / 3 * (
@@ -155,7 +170,7 @@ class AppGrid(GridLayout):
                self.ds['a'] * self.ds['p1'] * self.ds['f'] * self.ds['a'] * self.ds['b'] / 9 * (
                    (self.ds['a'] / 3 + ey) / ((self.ds['a'] / 3 + ey) ** 2 + e1x ** 2) ** (1 / 2) +
                    (self.ds['a'] / 3 - ey) / ((self.ds['a'] / 3 - ey) ** 2 + e1x ** 2) ** (1 / 2)) - \
-               self.ds['a'] * self.ds['p1'] * self.ds['f'] * self.ds['a'] * self.ds['b'] / 9 * (
+               self.ds['a'] * self.ds['p2'] * self.ds['f'] * self.ds['a'] * self.ds['b'] / 9 * (
                    (self.ds['a'] / 3 + ey) / ((self.ds['a'] / 3 + ey) ** 2 + e2x ** 2) ** (1 / 2) +
                    (self.ds['a'] / 3 - ey) / ((self.ds['a'] / 3 - ey) ** 2 + e2x ** 2) ** (1 / 2))
         return f
@@ -170,7 +185,7 @@ class AppGrid(GridLayout):
             counter = 0
             for chunk in data_lake[source]:
                 self.ds = chunk
-                system_result = fsolve(self.equations, (-1, -1, -1), factor=0.1,
+                system_result = fsolve(self.equations, (1,1,1),factor=0.1,
                                        xtol=0.00001)  # xtol=float(self.ids.accuracy.text))
                 pprint("Result:")
                 pprint(system_result)
@@ -192,26 +207,34 @@ class AppGrid(GridLayout):
         gs = plt.GridSpec(3, 3)
         plt.subplot(gs[0, :])
         plt.tight_layout()
-        plt.title('px')
-        plt.plot('px', 'p_e1x_f', data=px_data_frame, marker='', color='m', linewidth=1, alpha=0.9, label='p_e1x_f')
-        plt.plot('px', 'p_e2x_f', data=px_data_frame, marker='', color='y', linewidth=1, alpha=0.9,
-                 label='p_e2x_f')
-        plt.plot('px', 'p_ey_f', data=px_data_frame, marker='', color='k', linewidth=1, alpha=0.9,
-                 label='p_ey_f')
+        plt.margins(0.1)
+        plt.subplots_adjust(hspace=0.4)
+        plt.title('f(Px)')
+        plt.grid(color='k', linestyle='--', linewidth=0.2)
+        plt.plot('px', 'p_e1x_f', data=px_data_frame, marker='.', color='m',  linewidth=2, alpha=1, label='e1x')
+        plt.plot('px', 'p_e2x_f', data=px_data_frame, marker='.', color='b', linewidth=2, alpha=1, label='e2x')
+        plt.plot('px', 'p_ey_f', data=px_data_frame, marker='.', color='g', linewidth=2, alpha=1, label='ey')
+        plt.xlabel("dPx, N")
+        plt.ylabel("Radus, meters")
+        plt.legend()
         plt.subplot(gs[1, :])
-        plt.title('py')
-        plt.plot('py', 'p_e1x_f', data=py_data_frame, marker='', color='m', linewidth=1, alpha=0.9, label='p_e1x_f')
-        plt.plot('py', 'p_e2x_f', data=py_data_frame, marker='', color='y', linewidth=1, alpha=0.9,
-                 label='p_e2x_f')
-        plt.plot('py', 'p_ey_f', data=py_data_frame, marker='', color='k', linewidth=1, alpha=0.9,
-                 label='p_ey_f')
+        plt.title('f(Py)')
+        plt.grid(color='k', linestyle='--', linewidth=0.2)
+        plt.plot('py', 'p_e1x_f', data=py_data_frame, marker='.', color='m', linewidth=2, alpha=1, label='e1x')
+        plt.plot('py', 'p_e2x_f', data=py_data_frame, marker='.', color='b', linewidth=2, alpha=1, label='e2x')
+        plt.plot('py', 'p_ey_f', data=py_data_frame, marker='.', color='g', linewidth=2, alpha=1, label='ey')
+        plt.xlabel("dPy, N")
+        plt.ylabel("Radus, meters")
+        plt.legend()
         plt.subplot(gs[2, :])
-        plt.title('m')
-        plt.plot('m', 'p_e1x_f', data=m_data_frame, marker='', color='m', linewidth=1, alpha=0.9, label='p_e1x_f')
-        plt.plot('m', 'p_e2x_f', data=m_data_frame, marker='', color='y', linewidth=1, alpha=0.9,
-                 label='p_e2x_f')
-        plt.plot('m', 'p_ey_f', data=m_data_frame, marker='', color='k', linewidth=1, alpha=0.9,
-                 label='p_ey_f')
+        plt.title('f(M)')
+        plt.grid(color='k', linestyle='--', linewidth=0.2)
+        plt.plot('m', 'p_e1x_f', data=m_data_frame, marker='.', color='m', linewidth=2, alpha=1, label='e1x')
+        plt.plot('m', 'p_e2x_f', data=m_data_frame, marker='.', color='b', linewidth=2, alpha=1, label='e2x')
+        plt.plot('m', 'p_ey_f', data=m_data_frame, marker='.', color='g', linewidth=2, alpha=1, label='ey')
+        plt.xlabel("dM, Nm")
+        plt.ylabel("Radus, meters")
+        plt.legend()
         self.ids.chart_data.add_widget(FigureCanvasKivyAgg(plt.gcf()))
         self.display.text = str('e1x = {}, e2x = {}, ey = {}'.format(p_e1x_f, p_e2x_f, p_ey_f))
 
@@ -221,7 +244,7 @@ class AppGrid(GridLayout):
 # except:
 #            self.display.text = "Set all fields in correct format"
 '''
-
+Window.size = (1280, 766)
 
 class FmeeApp(App):
     def build(self):
